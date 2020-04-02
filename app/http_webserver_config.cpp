@@ -135,6 +135,7 @@ int32_t host_sleep_pageload(const char* url_path,
                             cy_http_message_body_t* http_data)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
+    SocketAddress sock_addr;
 
     char create_wake_button1[] = "<html>"
                                  "<body>"
@@ -149,13 +150,18 @@ int32_t host_sleep_pageload(const char* url_path,
                                      "</form>"
                                  "</body>"
                                  "</html>";
-    uint32_t data_len = (strlen(create_wake_button1)+strlen(wifi->get_ip_address())+strlen(create_wake_button2));
+    uint32_t data_len = 0;
+
+    /* Get ip address */
+    wifi->get_ip_address(&sock_addr);
+
+    data_len = (strlen(create_wake_button1)+strlen(sock_addr.get_ip_address())+strlen(create_wake_button2));
 
     memset(http_app_response, '\0', sizeof(http_app_response));
     
     if (data_len < sizeof(http_app_response)) {
         snprintf(http_app_response, data_len, "%s%s%s", create_wake_button1,
-                               wifi->get_ip_address(), create_wake_button2);
+                               sock_addr.get_ip_address(), create_wake_button2);
     } else {
         MBED_APP_ERR(("HTTP response string length exceeds the buffer size\r\n"));
     }
@@ -202,13 +208,19 @@ int32_t host_wake_pageload(const char* url_path,
                           cy_http_message_body_t* http_data)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
-    uint32_t data_len = (strlen(wake_host_str1)+strlen(wifi->get_ip_address())+strlen(wake_host_str2));
+    uint32_t      data_len = 0;
+    SocketAddress sock_addr;
+
+    /* Get ip address */
+    wifi->get_ip_address(&sock_addr);
+
+    data_len = (strlen(wake_host_str1)+strlen(sock_addr.get_ip_address())+strlen(wake_host_str2));
 
     memset(http_app_response, '\0', sizeof(http_app_response));
     
     if (data_len < sizeof(http_app_response)) {
         snprintf(http_app_response, data_len, "%s%s%s", wake_host_str1,
-                               wifi->get_ip_address(), wake_host_str2);
+                               sock_addr.get_ip_address(), wake_host_str2);
     } else {
         MBED_APP_ERR(("HTTP response string length exceeds the buffer size\r\n"));
         return CY_RSLT_TYPE_ERROR;
@@ -295,6 +307,7 @@ cy_rslt_t app_http_server_init(WhdSTAInterface *wifi, HTTPServer *server)
 {
     cy_network_interface_t nw_interface;
     cy_rslt_t result = CY_RSLT_SUCCESS;
+    SocketAddress sock_addr;
 
     nw_interface.object = (void *)wifi;
     nw_interface.type   = CY_NW_INF_TYPE_WIFI;
@@ -341,7 +354,9 @@ cy_rslt_t app_http_server_init(WhdSTAInterface *wifi, HTTPServer *server)
     }
     else
     {
-        MBED_APP_INFO(("HTTP server started successfully. Go to the webpage http://%s\r\n", wifi->get_ip_address()));
+        /* Get ip address */
+        wifi->get_ip_address(&sock_addr);
+        MBED_APP_INFO(("HTTP server started successfully. Go to the webpage http://%s\r\n", sock_addr.get_ip_address()));
     }
 
     return result;
