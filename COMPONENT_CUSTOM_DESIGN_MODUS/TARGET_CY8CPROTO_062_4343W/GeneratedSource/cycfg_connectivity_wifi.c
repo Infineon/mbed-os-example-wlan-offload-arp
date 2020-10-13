@@ -4,11 +4,13 @@
 * Description:
 * Connectivity Wi-Fi configuration
 * This file was automatically generated and should not be modified.
-* Device Configurator: 2.0.0.1483
-* Device Support Library (../../../psoc6pdl): 1.3.1.1499
+* Tools Package 2.1.0.1266
+* psoc6pdl 1.6.1.4886
+* personalities_2.0 2.0.0.0
+* udd 1.2.0.473
 *
 ********************************************************************************
-* Copyright 2017-2019 Cypress Semiconductor Corporation
+* Copyright 2020 Cypress Semiconductor Corporation
 * SPDX-License-Identifier: Apache-2.0
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,14 +37,10 @@ static const arp_ol_cfg_t arp_ol_cfg_0 =
 	.sleep_enable_mask = CY_ARP_OL_FEATURE_SLEEP_ENABLE_MASK_0,
 	.peerage = CY_ARP_OL_PEER_AGE_0,
 };
-static const cy_pf_ol_cfg_t cy_pf_ol_cfg_0[] = 
-{
-	[0u] = {.feature = CY_PF_OL_FEAT_LAST},
-};
 static const ol_desc_t ol_list_0[] = 
 {
 	[0u] = {"ARP", &arp_ol_cfg_0, &arp_ol_fns, &arp_ol_0_ctxt},
-	[1u] = {NULL, NULL, NULL, NULL},
+	[2u] = {NULL, NULL, NULL, NULL},
 };
 
 const ol_desc_t *cycfg_get_default_ol_list(void)
